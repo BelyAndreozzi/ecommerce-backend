@@ -8,4 +8,4 @@ class DateHelper{
     }
 }
 
-module.exports = DateHelper
+export { DateHelper }

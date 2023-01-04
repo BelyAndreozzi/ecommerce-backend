@@ -1,8 +1,0 @@
-[
-  {
-    "title": "Escuadra",
-    "price": "230",
-    "thumbnail": "url",
-    "id": 1
-  }
-]

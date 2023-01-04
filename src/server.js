@@ -1,5 +1,5 @@
-const fs = require('fs')
-const express = require('express')
+import express from "express"
+
 const { Router } = express;
 
 const PORT = process.env.PORT || 8080
@@ -14,26 +14,24 @@ app.use(express.json())
 const routerProductos = Router();
 app.use("/api/productos", routerProductos);
 const routerCarrito = Router();
-app.use("/api/carrito", routerCarrito);
+app.use("/api/carritos", routerCarrito);
 
 app.use("*", (req, res) => {
     res.status(404).send("La ruta a la que intentas acceder, no existe!");
 })
 
+import { ManagerDaoCarts, ManagerDaoProducts } from "./config/daosConfig.js";
+
+const managerProductos = ManagerDaoProducts
+import { Producto } from "./objs/Producto.js"; 
+
+const managerCarrito = ManagerDaoCarts
+import { Carrito } from "./objs/Carrito.js";
 
 
-const ManagerProductos = require('./managers/ManagerProductos.js')
-const managerProductos = new ManagerProductos('./datos/productos.txt')
-
-const Producto = require('./objs/Producto.js');
-
-const ManagerCarrito = require('./managers/ManagerCarrito.js');
-const managerCarrito = new ManagerCarrito('./datos/carritos.txt')
-
-const Carrito = require('./objs/Carrito.js');
-
-const DateHelper = require('./helpers/DateHelper.js')
+import { DateHelper } from "./helpers/DateHelper.js";
 const dateHelper = new DateHelper()
+
 
 
 //admin - NO SÉ CÓMO HACER ESTO. AYUDA. 
@@ -58,7 +56,7 @@ routerProductos.get("/:id", async (req, res) => {
 routerProductos.post("/", async (req, res) => {
     try {
         const product = new Producto(req.body.title, req.body.price, req.body.thumbnail)
-        const result = await managerProductos.addProduct(product);
+        const result = await managerProductos.save(product);
         res.json(result);
     } catch (error) {
         return 'Faltan datos del producto'
@@ -76,6 +74,7 @@ routerProductos.put("/", async (req, res) => {
             res.json(result);
         }
     } catch (error) {
+        console.log(error);
         res.status(404).send(error)
     }
 }); // ¿ LO CAMBIO ? 
@@ -88,7 +87,7 @@ routerProductos.delete("/:id", async (req, res) => {
 
 //endpoints carrito
 routerCarrito.get("/:id/productos", async (req, res) => {
-    const result = await managerCarrito.getCart(req.params.id)
+    const result = await managerCarrito.getAll(req.params.id)
     if (typeof result == "string") {
         res.status(404).send('El carrito no existe')
     } else {
@@ -98,29 +97,31 @@ routerCarrito.get("/:id/productos", async (req, res) => {
 
 routerCarrito.post("/", async (req, res) => {
     try {
+        
         const carrito = new Carrito(dateHelper.getDate(), req.body.productsId == undefined ? [] : req.body.productsId)
-        const result = await managerCarrito.addCart(carrito);
+        
+        const result = await managerCarrito.save(carrito);
         res.json(result);
     } catch (error) {
-        return error
+        console.log(error);
     }
 });
 
 routerCarrito.post("/:id/productos", async (req, res) => {
     try {
-        const result = await managerCarrito.addProduct(req.body.id, req.params.id)
+        const result = await managerCarrito.updateById(req.body.productsId, req.params.id)
         res.json(result)
     } catch (error) {
-        return error
+         console.log(error);
     }
 })
 
 routerCarrito.delete("/:id", async (req, res) =>{
-    const result = await managerCarrito.deleteCartById(req.params.id);
+    const result = await managerCarrito.deleteById(req.params.id);
     res.json(result);
 })
 
 routerCarrito.delete("/:id/productos/:id_prod", async (req, res) =>{
-    const result = await managerCarrito.deleteProductInCartById(req.params.id_prod,req.params.id);
+    const result = await managerCarrito.deleteProductInCartById(req.params.id,req.params.id_prod);
     res.json(result);
 })
