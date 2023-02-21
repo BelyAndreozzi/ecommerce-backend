@@ -1,4 +1,4 @@
-const fs = require('fs');
+import { fs } from "fs";
 
 class ManagerProductos {
     constructor(filename) {
@@ -98,4 +98,4 @@ class ManagerProductos {
         
         
 
-module.exports = ManagerProductos
+export { ManagerProductos }

@@ -5,4 +5,4 @@ class Carrito {
     }
 }
 
-module.exports = Carrito
+export { Carrito }
