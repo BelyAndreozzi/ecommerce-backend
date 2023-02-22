@@ -1,7 +1,6 @@
 {
   "name": "e-commerce",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -22,5 +21,15 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "twilio": "^4.7.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BelyAndreozzi/ecommerce-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BelyAndreozzi/ecommerce-backend/issues"
+  },
+  "homepage": "https://github.com/BelyAndreozzi/ecommerce-backend#readme",
+  "description": ""
 }

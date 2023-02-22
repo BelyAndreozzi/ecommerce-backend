@@ -56,6 +56,7 @@ import { Carrito } from "./objs/Carrito.js";
 
 
 import { DateHelper } from "./helpers/DateHelper.js";
+import { DateHelper } from "./helpers/DateHelper.js";
 const dateHelper = new DateHelper()
 
 
@@ -145,6 +146,7 @@ routerProductos.put("/", async (req, res) => {
             res.json(result);
         }
     } catch (error) {
+        console.log(error);
         res.status(404).send(error)
     }
 }); // ¿ LO CAMBIO ? 
@@ -174,7 +176,7 @@ routerCarrito.post("/", async (req, res) => {
         res.json(result);
         
     } catch (error) {
-        return error
+        console.log(error);
     }
 });
 
@@ -183,7 +185,7 @@ routerCarrito.post("/:id/productos", async (req, res) => {
         const result = await managerCarrito.save(req.body.id, req.params.id)
         res.json(result)
     } catch (error) {
-        return error
+         console.log(error);
     }
 })
 
