@@ -11,6 +11,10 @@ class MongoProductManager {
         return await Product.findById(id)
     }
 
+    async getByIds(idList){
+        return await Product.find({_id:{$in:idList}})
+    }
+
     async getAll(){
         return await Product.find()
     }
