@@ -42,4 +42,3 @@ const options = {
 
 
 export default options
-export default options

@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 
-const gMail = 'fbelen.andreozzi@gmail.com' //admin
-const gPass = 'plekeriilfmbtpom'
+const gMail = 'adminEmail' //admin
+const gPass = 'adminPassword'
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',

@@ -5,6 +5,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import options from "./config/databaseConfig.js";
 import passport from "passport";
+import { logger } from "./loggers/logger.js";
 
 import { checkUserLoggued } from "./middlewares/userAuth.js";
 
@@ -13,7 +14,7 @@ const { Router } = express;
 const PORT = process.env.PORT || 8080
 const app = express()
 
-const server = app.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
+const server = app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`))
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -56,34 +57,29 @@ import { Carrito } from "./objs/Carrito.js";
 
 
 import { DateHelper } from "./helpers/DateHelper.js";
-import { DateHelper } from "./helpers/DateHelper.js";
 const dateHelper = new DateHelper()
 
 
 //admin W.I.P 
 let isAdmin = true;
 
-//
-let userCartId 
 
 //transporter
 
-const emailTemplate = `<div>
-        <h1>Tu pedido es:</h1>
-        <p></p>
-        <a href="https://www.google.com/">Explorar</a>
-</div>`
-
-/* const emailOptions = {
-    from: "server app Node",
-    to: gMail, //destinatario
-    subject: `Nuevo pedido de: ${req.user.name} [${req.user.email}].`,
-    html: emailTemplate
-} */
 
 app.post("/envio-email", async (req, res) => {
     try {
-        await transporter.sendMail(emailOptions)
+        const productos = await managerProductos.getAll()
+        await transporter.sendMail({
+            from: "server app Node",
+            to: gMail, //destinatario
+            subject: `Nuevo pedido de: ${req.user.name} [${req.user.email}].`,
+            html: `<div>
+            <h1>Tu pedido es:</h1>
+            <p>${productos}</p>
+            
+    </div>`
+        })
         res.send('El mensaje se ha enviado correctamente')
     } catch (error) {
         res.send(`Hubo un error ${error}`)
@@ -94,9 +90,7 @@ app.post("/envio-email", async (req, res) => {
 app.post("/envio-whatsapp", async (req, res) => {
 
     try {
-        const carrito = await managerCarrito.getById(userCartId)
-        console.log(carrito);
-        const productos = await managerProductos.getByIds(carrito.productsId)
+        const productos = await managerProductos.getAll()
         await twilioClient.messages.create({
             from: twilioWhatsappPhone,
             to: adminWhatsappPhone,
@@ -121,7 +115,7 @@ routerProductos.get("/", checkUserLoggued, async (req, res) => {
 });
 
 routerProductos.get("/:id", async (req, res) => {
-    console.log(req.params.id);
+    logger.info(req.params.id);
     res.json(await managerProductos.getById(req.params.id));
 });
 
@@ -146,7 +140,7 @@ routerProductos.put("/", async (req, res) => {
             res.json(result);
         }
     } catch (error) {
-        console.log(error);
+        logger.error(error);
         res.status(404).send(error)
     }
 }); // ¿ LO CAMBIO ? 
@@ -176,7 +170,7 @@ routerCarrito.post("/", async (req, res) => {
         res.json(result);
         
     } catch (error) {
-        console.log(error);
+        logger.error(error);
     }
 });
 
@@ -185,7 +179,7 @@ routerCarrito.post("/:id/productos", async (req, res) => {
         const result = await managerCarrito.save(req.body.id, req.params.id)
         res.json(result)
     } catch (error) {
-         console.log(error);
+         logger.error(error);
     }
 })
 
