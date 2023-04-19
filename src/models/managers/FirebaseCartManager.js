@@ -1,6 +1,6 @@
 import admin from "firebase-admin";
-import FirebaseObjects from "../helpers/FirebaseObjects.js";
-import { Carrito } from "../objs/Carrito.js";
+import FirebaseObjects from "../../helpers/FirebaseObjects.js";
+import { Carrito } from "../../objs/carrito.js";
 
 class FirebaseCartManager {
     constructor(collection) {
@@ -26,7 +26,7 @@ class FirebaseCartManager {
                 timestamp: doc.data().timestamp
             }
         })
-     return carts
+        return carts
     }
 
     async save(cart) {

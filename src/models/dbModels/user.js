@@ -19,15 +19,15 @@ const userSchema = new mongoose.Schema({
     address: {
         type: String,
     },
-    age:{
-        type:Number,
-        required:true
+    age: {
+        type: Number,
+        required: true
     },
     phone: {
         type: String,
         required: true,
     },
-    avatar:String
+    avatar: String
 })
 
 export const User = mongoose.model(userCollection, userSchema);

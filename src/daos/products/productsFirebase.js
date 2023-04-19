@@ -1,9 +1,9 @@
-import { FirebaseProductManager } from "../../managers/FirebaseProductManager.js";
+import { FirebaseProductManager } from "../../models/managers/FirebaseProductManager.js";
 
-class FirebaseProductsDao extends FirebaseProductManager{
-    constructor(collection){
+class FirebaseProductsDao extends FirebaseProductManager {
+    constructor(collection) {
         super(collection)
     }
 }
 
-export {FirebaseProductsDao}
+export { FirebaseProductsDao }

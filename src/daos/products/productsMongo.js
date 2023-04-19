@@ -1,9 +1,9 @@
-import { MongoProductManager } from "../../managers/MongoProductManager.js";
+import { MongoProductManager } from "../../models/managers/MongoProductManager.js";
 
-class MongoProductsDao extends MongoProductManager{
-    constructor(options, collection){
+class MongoProductsDao extends MongoProductManager {
+    constructor(options, collection) {
         super(options, collection)
     }
 }
 
-export {MongoProductsDao}
+export { MongoProductsDao }

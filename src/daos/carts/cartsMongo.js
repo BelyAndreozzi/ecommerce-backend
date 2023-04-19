@@ -1,9 +1,9 @@
-import { MongoCartManager } from "../../managers/MongoCartManager.js";
+import { MongoCartManager } from "../../models/managers/MongoCartManager.js";
 
-class MongoCartsDao extends MongoCartManager{
-    constructor(options, collection){
+class MongoCartsDao extends MongoCartManager {
+    constructor(options, collection) {
         super(options, collection)
     }
 }
 
-export {MongoCartsDao}
+export { MongoCartsDao }

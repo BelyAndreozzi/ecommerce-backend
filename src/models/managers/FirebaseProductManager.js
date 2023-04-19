@@ -1,23 +1,21 @@
 import admin from "firebase-admin";
-import FirebaseObjects from "../helpers/FirebaseObjects.js";
+import FirebaseObjects from "../../helpers/FirebaseObjects.js";
 
-class FirebaseProductManager { 
-    constructor(collection){
+class FirebaseProductManager {
+    constructor(collection) {
         this.db = admin.firestore()
         this.productCollection = this.db.collection(collection)
         this.firebaseHelper = new FirebaseObjects();
     }
 
-    
-
-    async getById(id){
+    async getById(id) {
         const doc = this.productCollection.doc(id)
         const product = await doc.get()
         const response = product.data()
         return response
     }
 
-    async getAll(){
+    async getAll() {
         const snapshot = await this.productCollection.get()
         const docs = snapshot.docs
         let products = docs.map(doc => {
@@ -31,7 +29,7 @@ class FirebaseProductManager {
         return products
     }
 
-    async save(product){
+    async save(product) {
         const doc = this.productCollection.doc()
         try {
             await doc.create(this.firebaseHelper
@@ -42,7 +40,7 @@ class FirebaseProductManager {
         console.log("producto agregado");
     }
 
-    async updateProduct(data,id){
+    async updateProduct(data, id) {
         const doc = this.productCollection.doc(id)
         console.log(doc);
         let updatedProduct = await doc.update(this.firebaseHelper
@@ -50,15 +48,15 @@ class FirebaseProductManager {
         return updatedProduct
     }
 
-    async deleteById(id){
+    async deleteById(id) {
         const doc = this.productCollection.doc(id)
         const deletedProduct = await doc.delete()
         return deletedProduct
     }
 }
 
-function mapProductToPlainJsObject(object){
-    return {title:object.title,price:object.price,thumbnail:object.thumbnail}
+function mapProductToPlainJsObject(object) {
+    return { title: object.title, price: object.price, thumbnail: object.thumbnail }
 }
 
 export { FirebaseProductManager }

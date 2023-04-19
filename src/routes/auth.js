@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { User } from "../models/user.js";
+import { User } from "../models/dbModels/user.js";
 import bcript from "bcrypt";
 
 //encriptar contraseña
@@ -31,7 +31,7 @@ passport.use("signupStrategy", new LocalStrategy(
     (req, username, password, done) => {
         User.findOne({ email: username }, (err, userFound) => {
             if (err) {
-                return done(null,false,{message:`Error al encontrar el usuario: ${err}`});
+                return done(null, false, { message: `Error al encontrar el usuario: ${err}` });
             }
             if (userFound) {
                 return done(null, false, { message: "El correo ya está registrado" });
@@ -49,7 +49,7 @@ passport.use("signupStrategy", new LocalStrategy(
                 if (err) {
                     return done(null, false, { message: `Error al crear el usuario: ${err}` });
                 }
-                return done(null, userCreated, {message: "Usuario creado correctamente"});
+                return done(null, userCreated, { message: "Usuario creado correctamente" });
             })
         })
     }
@@ -62,10 +62,10 @@ authRouter.post("/signup", passport.authenticate("signupStrategy", {
     res.send('Usuario registrado y autenticado')
 })
 
-authRouter.get("/signupError",(req,res)=>{
+authRouter.get("/signupError", (req, res) => {
     const errMessage = req.session.messages[0] || '';
     req.session.messages = [];
-    res.json({error:errMessage})
+    res.json({ error: errMessage })
 });
 
 
@@ -96,7 +96,7 @@ authRouter.post("/login", passport.authenticate("loginStrategy", {
     failureMessage: true,
 }),
     (req, res) => {
-        const {email} = req.body
+        const { email } = req.body
         req.session.passport.username = email
         res.send('El usuario ha iniciado sesión correctamente')
     })
@@ -105,11 +105,11 @@ authRouter.post("/login", passport.authenticate("loginStrategy", {
 
 //Logout 
 authRouter.post("/logout", (req, res) => {
-    req.logout(err=>{
-        if(err){
-            return res.status(500).json({message:`Error al cerrar sesión: ${err}`})
+    req.logout(err => {
+        if (err) {
+            return res.status(500).json({ message: `Error al cerrar sesión: ${err}` })
         }
-        res.status(200).json({message:'Sesión cerrada correctamente'})
+        res.status(200).json({ message: 'Sesión cerrada correctamente' })
     });
 })
 
